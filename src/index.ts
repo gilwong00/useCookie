@@ -3,13 +3,15 @@ interface CookieOptions {
   expires?: number;
 }
 
+type CookieValues = string | number | boolean;
+
 const getExpirationDate = (hours: number = 1): string =>
   new Date(Date.now() + hours * 60 * 60 * 1000).toUTCString();
 
 export default () => {
   const setValue = (
     key: string,
-    value: string | number | boolean,
+    value: CookieValues,
     options: CookieOptions = {}
   ): void => {
     const cookie = `${key}=${encodeURIComponent(
@@ -20,7 +22,7 @@ export default () => {
     document.cookie = cookie;
   };
 
-  const getValue = (key: string): string => {
+  const getValue = (key: string): CookieValues => {
     const decodedCookie: string = decodeURIComponent(document.cookie);
     const value: string = decodedCookie.split('; ').find((name: string) => {
       return name.startsWith(key);
